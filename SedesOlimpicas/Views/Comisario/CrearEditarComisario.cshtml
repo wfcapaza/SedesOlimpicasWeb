@@ -1,0 +1,162 @@
+﻿@model SedesOlimpicas.Models.ComisarioDto
+
+@{
+    ViewBag.Title = "Acciones Comisario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    @if (Model.IdComisario > 0)
+    {
+        <span>Editar Comisario</span>
+    }
+    else
+    {
+        <span>Crear Comisario</span>
+    }
+</h2>
+<hr />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formularioComisario" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group hidden">
+            <label class="col-md-2">Id Comisario</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.IdComisario, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IdComisario, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2">Nombres</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nombres, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nombres, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2">Apellidos</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2">Tipo de Tarea</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.TipoTarea, new SelectList(ViewBag.ListTipoTareas, "Value", "Text"), "Seleccione Tipo de Tarea", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TipoTarea, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2">Nombre del Evento</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IdEvento, new SelectList(ViewBag.ListEventos, "Value", "Text"), "Seleccione Evento", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IdEvento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <a class="btn btn-primary" id="guardarCambios"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Guardar</a>
+                &nbsp;&nbsp;
+                <a class="btn btn-danger" href="@Url.Action("Index")"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar</a>
+            </div>
+        </div>
+    </div>
+}
+@section Styles{
+    @Styles.Render("~/sweetAlertStyles")
+}
+@section Scripts{
+    @Scripts.Render("~/sweetAlert")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", "#guardarCambios", function () {
+                if ($("#formularioComisario").valid()) {
+                    const comisario = {
+                        IdComisario: $("#IdComisario").val(),
+                        Nombres: $("#Nombres").val(),
+                        Apellidos: $("#Apellidos").val(),
+                        TipoTarea: $("#TipoTarea").val(),
+                        IdEvento: $("#IdEvento").val()
+                    };
+
+                    $.ajax({
+                        contentType: 'application/json',
+                        type: 'POST',
+                        url: '@Url.Action("CrearEditarComisario")',
+                        data: JSON.stringify(comisario),
+                        dataType: "json",
+                        success: function (result) {
+                            if (result) {
+                                swal({
+                                    title: "Evento guardado exitosamente",
+                                    type: "success",
+                                    showConfirmButton: true,
+                                }, function () {
+                                    window.location = "@Url.Action("Index")";
+                                    swal.close();
+                                });
+                            }
+                        },
+                        error: function () {
+                            swal({
+                                title: "Ocurrió un error. Intentelo más tarde",
+                                type: "warning",
+                                showConfirmButton: true,
+                            }, function () {
+                                swal.close();
+                            });
+                        }
+                    });
+                }
+            });
+            $("#formularioComisario").validate({
+                ignore: [],
+                errorPlacement: function (error, element) {
+                    if ($(element).parent().hasClass("input-group")) {
+                        error.insertAfter(element.parent());
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                rules: {
+                    "Nombres": {
+                        required: true,
+                        maxlength: 50
+                    },
+                    "Apellidos": {
+                        required: true,
+                        maxlength: 50
+                    },
+                    "TipoTarea": {
+                        required: true
+                    },
+                    "IdEvento": {
+                        required: true
+                    }
+                },
+                messages: {
+                    Nombres: {
+                        required: "Nombres es requerido",
+                        maxlength: "Nombres debe ser menor o igual a 50 carácteres"
+                    },
+                    Apellidos: {
+                        required: "Apellidos es requerido",
+                        maxlength: "Apellidos debe ser menor o igual a 50 carácteres"
+                    },
+                    TipoTarea: {
+                        required: "Seleccione un tipo de tarea"
+                    },
+                    IdEvento: {
+                        required: "Seleccione un evento"
+                    }
+                }
+            });
+        });
+    </script>
+}

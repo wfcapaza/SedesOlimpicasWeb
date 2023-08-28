@@ -1,0 +1,193 @@
+﻿@model SedesOlimpicas.Models.ComplejoDto
+@{
+    ViewBag.Title = "Accione Complejo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    @if (Model.IdComplejo > 0)
+    {
+        <span>Editar Complejo</span>
+    }
+    else
+    {
+        <span>Crear Complejo</span>
+    }
+</h2>
+<hr />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formularioComplejo" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group hidden">
+        <label class="col-md-2">Id Complejo</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.IdComplejo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.IdComplejo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">Nombre</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.NombreComplejo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.NombreComplejo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">Localización</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Localizacion, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Localizacion, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">Jefe</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Jefe, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Jefe, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">Tipo Deporte</label>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.TipoDeporte, new SelectList(ViewBag.ListTipoDepo, "Value", "Text"), "Seleccione Tipo de Tarea", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TipoDeporte, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">Area Ocupada(m)</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.AreaOcupada, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.AreaOcupada, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2">Sede</label>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.IdSede, new SelectList(ViewBag.ListSedes, "Value", "Text"), "Seleccione Evento", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.IdSede, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <a class="btn btn-primary" id="guardarCambios"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Guardar</a>
+            &nbsp;&nbsp;
+            <a class="btn btn-danger" href="@Url.Action("Index")"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar</a>
+        </div>
+    </div>
+</div>
+}
+@section Styles{
+    @Styles.Render("~/sweetAlertStyles")
+}
+@section Scripts{
+    @Scripts.Render("~/sweetAlert")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", "#guardarCambios", function () {
+                if ($("#formularioComplejo").valid()) {
+                    const complejo = {
+                        IdComplejo: $("#IdComplejo").val(),		
+                        NombreComplejo: $("#NombreComplejo").val(),	
+                        Localizacion: $("#Localizacion").val(),	
+                        Jefe: $("#Jefe").val(),			
+                        TipoDeporte: $("#TipoDeporte").val(),		
+                        AreaOcupada: $("#AreaOcupada").val(),		
+                        IdSede: $("#IdSede").val(),			
+                    };
+
+                    $.ajax({
+                        contentType: 'application/json',
+                        type: 'POST',
+                        url: '@Url.Action("CrearEditarComplejo")',
+                        data: JSON.stringify(complejo),
+                        dataType: "json",
+                        success: function (result) {
+                            if (result) {
+                                swal({
+                                    title: "Complejo guardado exitosamente",
+                                    type: "success",
+                                    showConfirmButton: true,
+                                }, function () {
+                                    window.location = "@Url.Action("Index")";
+                                    swal.close();
+                                });
+                            }
+                        },
+                        error: function () {
+                            swal({
+                                title: "Ocurrió un error. Intentelo más tarde",
+                                type: "warning",
+                                showConfirmButton: true,
+                            }, function () {
+                                swal.close();
+                            });
+                        }
+                    });
+                }
+            });
+            $("#formularioComplejo").validate({
+                ignore: [],
+                errorPlacement: function (error, element) {
+                    if ($(element).parent().hasClass("input-group")) {
+                        error.insertAfter(element.parent());
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                rules: {
+                    "NombreComplejo": {
+                        required: true,
+                        maxlength: 50
+                    },
+                    "Localizacion": {
+                        required: true,
+                        maxlength: 50
+                    },
+                    "Jefe": {
+                        required: true,
+                        maxlength: 100
+                    },
+                    "TipoDeporte": {
+                        required: true
+                    },
+                    "AreaOcupada": {
+                        required: true,
+                        min: 1
+                    },
+                    "IdSede": {
+                        required: true
+                    }
+                },
+                messages: {
+                    NombreComplejo: {
+                        required: "Nombre es requerido",
+                        maxlength: "Nombre debe ser menor o igual a 50 carácteres"
+                    },
+                    Localizacion: {
+                        required: "Localización es requerido",
+                        maxlength: "Localización debe ser menor o igual a 50 carácteres"
+                    },
+                    Jefe: {
+                        required: "Jefe es requerido",
+                        maxlength: "Jefe debe ser menor o igual a 100 carácteres"
+                    },
+                    TipoDeporte: {
+                        required: "Seleccione un tipo deporte"
+                    },
+                    AreaOcupada: {
+                        required: "Area ocupada es requerido",
+                        min: "Area ocupada debe se mayor o igual a 1",
+                    },
+                    IdSede: {
+                        required: "Seleccione una sede"
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,17 @@
+﻿body {
+    background-color: #D0D6EA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.contenedor {
+    background-color:white;
+    border: solid;
+    border-radius: 15px;
+    border-color: #C2C7DA;
+    margin-top: 10%;
+    padding: 20px;
+}
+.contenedor input{
+    background-color:transparent;
+}

@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "Listado Sedes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista de Sedes</h2>
+<p>
+    <a class="btn btn-success" href="@Url.Action("CrearEditarSede")"><i class="fa fa-plus"></i>&nbsp;&nbsp;Crear</a>
+</p>
+<table id="tablaSedes" class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th class="text-center">Nro. de Complejos</th>
+            <th class="text-center">Presupuesto</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+@section Styles{
+    @Styles.Render("~/sweetAlertStyles")
+}
+@section Scripts{
+    @Scripts.Render("~/sweetAlert")
+    <script>
+    function MostrarListado() {
+        $.getJSON("@Url.Action("ListaSedes")", function (listaSedes) {
+            $("#tablaSedes tbody").html("");
+            listaSedes.forEach(sede => {
+                    $("#tablaSedes tbody").append(
+                        $("<tr>").append(
+                            $("<td>").text(sede.Nombre),
+                            $("<td>").text(sede.NroComplejos).addClass("text-center"),
+                            $("<td>").text(sede.Presupuesto).addClass("text-center"),
+                            $("<td>").addClass("text-center").append(
+                                $("<button>").addClass("btn btn-primary btn-sm").attr("id", "editarSede").data("dataSede", sede).append("<i class='fa fa-pencil'>&nbsp;&nbsp;Editar</i>"),
+                                "&nbsp;&nbsp;",
+                                $("<button>").addClass("btn btn-danger btn-sm").attr("id", "eliminarSede").data("dataSede", sede).append("<i class='fa fa-trash'>&nbsp;&nbsp;Eliminar</i>")
+                            ),
+                        )
+                    )
+                });
+            });
+        }
+
+        $(document).ready(function () {
+            MostrarListado();
+            $(document).on("click", "#editarSede", function () {
+                const sede = $(this).data("dataSede");
+                window.location = "@Url.Action("CrearEditarSede")?idSede=" + sede.IdSede;
+            });
+            $(document).on("click", "#eliminarSede", function () {
+                const sede = $(this).data("dataSede");
+                swal({
+                    title: "¿Está seguro de eliminar la sede?",
+                    type: "warning",
+                    showCancelButton: true,
+                    cancelButtonText: "Cancelar",
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Si, eliminar",
+                    closeOnConfirm: true
+                },
+                    function () {
+                        $.ajax({
+                            contentType: 'application/json',
+                            type: 'POST',
+                            url: '@Url.Action("EliminarSede")',
+                            data: JSON.stringify({idSede: sede.IdSede}),
+                            dataType: "json",
+                            success: function (result) {
+                                if (result) {
+                                    MostrarListado();
+                                    swal({
+                                        title: "Sede eliminado correctamente",
+                                        type: "success",
+                                        showConfirmButton: true,
+                                    });
+                                }
+                            },
+                            error: function () {
+                                swal({
+                                    title: "Ocurrió un error. Intentelo más tarde",
+                                    type: "warning",
+                                    showConfirmButton: true,
+                                });
+                            }
+                        });
+                    }
+                );
+            });
+        });
+    </script>
+}
+

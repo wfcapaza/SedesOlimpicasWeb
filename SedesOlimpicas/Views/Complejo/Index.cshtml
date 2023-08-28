@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Listado de Complejos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista de Complejos</h2>
+<p>
+    <a class="btn btn-success" href="@Url.Action("CrearEditarComplejo")"><i class="fa fa-plus"></i>&nbsp;&nbsp;Crear</a>
+</p>
+<table id="tablaComplejos" class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Nombre de Complejo</th>
+            <th>Localización</th>
+            <th>Jefe</th>
+            <th>Tipo de Deporte</th>
+            <th>Nombre de Sede</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+@section Styles{
+    @Styles.Render("~/sweetAlertStyles")
+}
+@section Scripts{
+    @Scripts.Render("~/sweetAlert")
+    <script>
+    function MostrarListado() {
+        $.getJSON("@Url.Action("ListaComplejos")", function (listaComplejos) {
+            $("#tablaComplejos tbody").html("");
+            listaComplejos.forEach(complejo => {
+                $("#tablaComplejos tbody").append(
+                        $("<tr>").append(
+                            $("<td>").text(complejo.NombreComplejo),
+                            $("<td>").text(complejo.Localizacion),
+                            $("<td>").text(complejo.Jefe),
+                            $("<td>").text(complejo.TipoDeporte),
+                            $("<td>").text(complejo.NombreSede),
+                            $("<td>").addClass("text-center").append(
+                                $("<button>").addClass("btn btn-primary btn-sm").attr("id", "editarComplejo").data("dataComplejo", complejo).append("<i class='fa fa-pencil'>&nbsp;&nbsp;Editar</i>"),
+                                "&nbsp;&nbsp;",
+                                $("<button>").addClass("btn btn-danger btn-sm").attr("id", "eliminarComplejo").data("dataComplejo", complejo).append("<i class='fa fa-trash'>&nbsp;&nbsp;Eliminar</i>")
+                            ),
+                        )
+                    )
+                });
+            });
+        }
+
+        $(document).ready(function () {
+            MostrarListado();
+
+            $(document).on("click", "#editarComplejo", function () {
+                const complejo = $(this).data("dataComplejo");
+                window.location = "@Url.Action("CrearEditarComplejo")?idComplejo=" + complejo.IdComplejo;
+            });
+
+            $(document).on("click", "#eliminarComplejo", function () {
+                const comisario = $(this).data("dataComplejo");
+                swal({
+                    title: "¿Está seguro de eliminar al complejo?",
+                    type: "warning",
+                    showCancelButton: true,
+                    cancelButtonText: "Cancelar",
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Si, eliminar",
+                    closeOnConfirm: true
+                },
+                    function () {
+                        $.ajax({
+                            contentType: 'application/json',
+                            type: 'POST',
+                            url: '@Url.Action("EliminarComplejo")',
+                            data: JSON.stringify({ idComplejo: comisario.IdComplejo }),
+                            dataType: "json",
+                            success: function (result) {
+                                if (result) {
+                                    MostrarListado();
+                                    swal({
+                                        title: "Complejo eliminado correctamente",
+                                        type: "success",
+                                        showConfirmButton: true,
+                                    });
+                                }
+                            },
+                            error: function () {
+                                swal({
+                                    title: "Ocurrió un error. Intentelo más tarde",
+                                    type: "warning",
+                                    showConfirmButton: true,
+                                });
+                            }
+                        });
+                    }
+                );
+            });
+        });
+    </script>
+}

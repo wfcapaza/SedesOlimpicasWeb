@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "Listado de Eventos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista de Eventos</h2>
+<p>
+    <a class="btn btn-success" href="@Url.Action("CrearEditarEvento")"><i class="fa fa-plus"></i>&nbsp;&nbsp;Crear</a>
+</p>
+<table id="tablaEventos" class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Nombre del Evento</th>
+            <th>Fecha</th>
+            <th class="text-center">Duración</th>
+            <th class="text-center">Nro. Participantes</th>
+            <th class="text-center">Nro. Comisarios</th>
+            <th>Nombre del Complejo</th>
+            <th class="text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+@section Styles{
+    @Styles.Render("~/sweetAlertStyles")
+}
+@section Scripts{
+    @Scripts.Render("~/sweetAlert")
+<script>
+    function MostrarEventos() {
+        $.getJSON("@Url.Action("ListaEventos")", function (listaEventos) {
+                $("#tablaEventos tbody").html("");
+                listaEventos.forEach(evento => {
+                    $("#tablaEventos tbody").append(
+                        $("<tr>").append(
+                            $("<td>").text(evento.NombreEvento),
+                            $("<td>").text(evento.Fecha),
+                            $("<td>").text(evento.Duracion).addClass("text-center"),
+                            $("<td>").text(evento.NroParticipantes).addClass("text-center"),
+                            $("<td>").text(evento.NroComisarios).addClass("text-center"),
+                            $("<td>").text(evento.NombreComplejo),
+                            $("<td>").addClass("text-center").append(
+                                $("<button>").addClass("btn btn-primary btn-sm").attr("id", "editarEvento").data("dataEvento", evento).append("<i class='fa fa-pencil'>&nbsp;&nbsp;Editar</i>"),
+                                "&nbsp;&nbsp;",
+                                $("<button>").addClass("btn btn-danger btn-sm").attr("id", "eliminarEvento").data("dataEvento", evento).append("<i class='fa fa-trash'>&nbsp;&nbsp;Eliminar</i>")
+                            ),
+                        )
+                    )
+                });
+            });
+        }
+
+        $(document).ready(function () {
+            MostrarEventos();
+            $(document).on("click", "#editarEvento", function () {
+                const evento = $(this).data("dataEvento");
+                window.location = "@Url.Action("CrearEditarEvento")?idEvento=" + evento.IdEvento;
+            });
+            $(document).on("click", "#eliminarEvento", function () {
+                const evento = $(this).data("dataEvento");
+                swal({
+                    title: "¿Está seguro de eliminar el evento?",
+                    type: "warning",
+                    showCancelButton: true,
+                    cancelButtonText: "Cancelar",
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Si, eliminar",
+                    closeOnConfirm: true
+                },
+                    function () {
+                        $.ajax({
+                            contentType: 'application/json',
+                            type: 'POST',
+                            url: '@Url.Action("EliminarEvento")',
+                            data: JSON.stringify({idEvento: evento.IdEvento}),
+                            dataType: "json",
+                            success: function (result) {
+                                if (result) {
+                                    MostrarEventos();
+                                    swal({
+                                        title: "Evento eliminado correctamente",
+                                        type: "success",
+                                        showConfirmButton: true,
+                                    });
+                                }
+                            },
+                            error: function () {
+                                swal({
+                                    title: "Ocurrió un error. Intentelo más tarde",
+                                    type: "warning",
+                                    showConfirmButton: true,
+                                });
+                            }
+                        });
+                    }
+                );
+            });
+        });
+</script>
+}
