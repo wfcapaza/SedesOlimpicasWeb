@@ -21,181 +21,188 @@
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group hidden">
-        <label class="col-md-2">Id Evento</label>
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.IdEvento, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.IdEvento, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group hidden">
+            <label class="col-md-2">Id Evento</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.IdEvento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IdEvento, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label class="col-md-2">Nombre</label>
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.NombreEvento, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.NombreEvento, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="col-md-2">Nombre</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NombreEvento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NombreEvento, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2">Fecha</label>
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="col-md-2">Fecha(yyyymmdd)</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control fecha", @readonly = "readonly", autocomplete = "off" } })
+                @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2">Duración</label>
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Duracion, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Duracion, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="col-md-2">Duración</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Duracion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Duracion, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2">Nro. de Participantes</label>
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.NroParticipantes, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.NroParticipantes, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="col-md-2">Nro. de Participantes</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NroParticipantes, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NroParticipantes, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2">Nro. de Comisarios</label>
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.NroComisarios, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.NroComisarios, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="col-md-2">Nro. de Comisarios</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NroComisarios, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NroComisarios, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2">Complejo</label>
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.IdComplejo, new SelectList(ViewBag.ListaComplejos, "Value", "Text"), "Seleccione Complejo", new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.IdComplejo, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="col-md-2">Complejo</label>
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IdComplejo, new SelectList(ViewBag.ListaComplejos, "Value", "Text"), "Seleccione Complejo", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IdComplejo, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <a class="btn btn-primary" id="guardarCambios"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Guardar</a>
-            &nbsp;&nbsp;
-            <a class="btn btn-danger" href="@Url.Action("Index")"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar</a>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <a class="btn btn-primary" id="guardarCambios"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Guardar</a>
+                &nbsp;&nbsp;
+                <a class="btn btn-danger" href="@Url.Action("Index")"><i class="fa fa-times"></i>&nbsp;&nbsp;Cancelar</a>
+            </div>
         </div>
     </div>
-</div>
 }
 @section Styles{
     @Styles.Render("~/sweetAlertStyles")
+    @Styles.Render("~/datePickerStyles")
+    @Styles.Render("~/jqueryuiStyles")
 }
 @section Scripts{
     @Scripts.Render("~/sweetAlert")
     @Scripts.Render("~/bundles/jqueryval")
-<script>
-        $(document).ready(function () {
-            $(document).on("click", "#guardarCambios", function () {
-                if ($("#formularioEvento").valid()) {
-                    const evento = {
-                        IdEvento: $("#IdEvento").val(),
-                        NombreEvento: $("#NombreEvento").val(),
-                        Fecha: $("#Fecha").val(),
-                        Duracion: $("#Duracion").val(),
-                        NroParticipantes: $("#NroParticipantes").val(),
-                        NroComisarios: $("#NroComisarios").val(),
-                        IdComplejo: $("#IdComplejo").val()
-                    };
-                    $.ajax({
-                        contentType: 'application/json',
-                        type: 'POST',
-                        url: '@Url.Action("CrearEditarEvento")',
-                        data: JSON.stringify(evento),
-                        dataType: "json",
-                        success: function (result) {
-                            if (result) {
-                                swal({
-                                    title: "Evento guardado exitosamente",
-                                    type: "success",
-                                    showConfirmButton: true,
-                                }, function () {
-                                    window.location = "@Url.Action("Index")";
-                                    swal.close();
-                                });
-                            }
-                        },
-                        error: function () {
+    @Scripts.Render("~/jquery-ui")
+    @Scripts.Render("~/datePicker")
+    <script>
+    $(document).ready(function () {
+        $(document).on("click", "#guardarCambios", function () {
+            if ($("#formularioEvento").valid()) {
+                const evento = {
+                    IdEvento: $("#IdEvento").val(),
+                    NombreEvento: $("#NombreEvento").val(),
+                    Fecha: $("#Fecha").val(),
+                    Duracion: $("#Duracion").val(),
+                    NroParticipantes: $("#NroParticipantes").val(),
+                    NroComisarios: $("#NroComisarios").val(),
+                    IdComplejo: $("#IdComplejo").val()
+                };
+                $.ajax({
+                    contentType: 'application/json',
+                    type: 'POST',
+                    url: '@Url.Action("CrearEditarEvento")',
+                    data: JSON.stringify(evento),
+                    dataType: "json",
+                    success: function (result) {
+                        if (result) {
                             swal({
-                                title: "Ocurrió un error. Intentelo más tarde",
-                                type: "warning",
+                                title: "Evento guardado exitosamente",
+                                type: "success",
                                 showConfirmButton: true,
                             }, function () {
+                                window.location = "@Url.Action("Index")";
                                 swal.close();
                             });
                         }
-                    });
-                }
-            });
-            $("#formularioEvento").validate({
-                ignore: [],
-                errorPlacement: function (error, element) {
-                    if ($(element).parent().hasClass("input-group")) {
-                        error.insertAfter(element.parent());
-                    } else {
-                        error.insertAfter(element);
+                    },
+                    error: function () {
+                        swal({
+                            title: "Ocurrió un error. Intentelo más tarde",
+                            type: "warning",
+                            showConfirmButton: true,
+                        }, function () {
+                            swal.close();
+                        });
                     }
-                },
-                rules: {
-                    "Nombre": {
-                        required: true,
-                        maxlength: 50
-                    },
-                    "Fecha": {
-                        required: true
-                    },
-                    "Duracion": {
-                        required: true,
-                        min: 1,
-                        max: 10
-                    },
-                    "NroParticipantes": {
-                        required: true,
-                        min: 1,
-                        max: 50
-                    },
-                    "NroComisarios": {
-                        required: true,
-                        min: 1,
-                        max: 10
-                    },
-                    "IdComplejo": {
-                        required: true,
-                    }
-                },
-                messages: {
-                    Nombre: {
-                        required: "Nombre es requerido",
-                        maxlength: "Nombre debe ser menor o igual a 50 carácteres"
-                    },
-                    Fecha: {
-                        required: "Fecha es requerido"
-                    },
-                    Duracion: {
-                        required: "Duración es requerido",
-                        min: "Duración debe se mayor o igual a 1",
-                        max: "Duración debe ser menor igual a 10"
-                    },
-                    NroParticipantes: {
-                        required: "Nro. de participantes es requerido",
-                        min: "Nro. de participantes debe se mayor o igual a 1",
-                        max: "Nro. de participantes debe ser menor igual a 50"
-                    },
-                    NroComisarios: {
-                        required: "Nro. de comisarios es requerido",
-                        min: "Nro. de comisarios debe se mayor o igual a 1",
-                        max: "Nro. de comisarios debe ser menor igual a 10"
-                    },
-                    IdComplejo: {
-                        required: "Seleccione complejo"
-                    }
-                }
-            });
+                });
+            }
         });
-</script>
+        $("#formularioEvento").validate({
+            ignore: [],
+            errorPlacement: function (error, element) {
+                if ($(element).parent().hasClass("input-group")) {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            rules: {
+                "Nombre": {
+                    required: true,
+                    maxlength: 50
+                },
+                "Fecha": {
+                    required: true
+                },
+                "Duracion": {
+                    required: true,
+                    min: 1,
+                    max: 10
+                },
+                "NroParticipantes": {
+                    required: true,
+                    min: 1,
+                    max: 50
+                },
+                "NroComisarios": {
+                    required: true,
+                    min: 1,
+                    max: 10
+                },
+                "IdComplejo": {
+                    required: true,
+                }
+            },
+            messages: {
+                Nombre: {
+                    required: "Nombre es requerido",
+                    maxlength: "Nombre debe ser menor o igual a 50 carácteres"
+                },
+                Fecha: {
+                    required: "Fecha es requerido"
+                },
+                Duracion: {
+                    required: "Duración es requerido",
+                    min: "Duración debe se mayor o igual a 1",
+                    max: "Duración debe ser menor igual a 10"
+                },
+                NroParticipantes: {
+                    required: "Nro. de participantes es requerido",
+                    min: "Nro. de participantes debe se mayor o igual a 1",
+                    max: "Nro. de participantes debe ser menor igual a 50"
+                },
+                NroComisarios: {
+                    required: "Nro. de comisarios es requerido",
+                    min: "Nro. de comisarios debe se mayor o igual a 1",
+                    max: "Nro. de comisarios debe ser menor igual a 10"
+                },
+                IdComplejo: {
+                    required: "Seleccione complejo"
+                }
+            }
+        });
+        $(".fecha").datepicker({
+            dateFormat: 'yymmdd',
+        });
+    });
+    </script>
 }

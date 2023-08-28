@@ -34,6 +34,21 @@ namespace SedesOlimpicas
             // Sweet alert
             bundles.Add(new ScriptBundle("~/sweetAlert").Include(
                       "~/Scripts/sweetAlert/sweetalert.min.js"));
+
+            // dataPicker styles
+            bundles.Add(new StyleBundle("~/datePickerStyles").Include(
+                      "~/Content/dataPicker/datepicker.css"));
+
+            // dataPicker 
+            bundles.Add(new ScriptBundle("~/datePicker").Include(
+                      "~/Scripts/datapicker/datepicker.js"));
+            // jQueryUI CSS
+            bundles.Add(new StyleBundle("~/jqueryuiStyles").Include(
+                        "~/Scripts/jquery-ui/jquery-ui.min.css"));
+
+            // jQueryUI 
+            bundles.Add(new ScriptBundle("~/jquery-ui").Include(
+                        "~/Scripts/jquery-ui/jquery-ui.min.js"));
         }
     }
 }
