@@ -100,5 +100,9 @@ namespace SedesOlimpicas.Controllers
         {
             return Json(await _complejo.EliminarComplejo(idComplejo), JsonRequestBehavior.AllowGet);
         }
+        public async Task<JsonResult> ValidarNroMaxSedes(int idSede)
+        {
+            return Json(await _complejo.ValidarNroMaxSedes(idSede), JsonRequestBehavior.AllowGet);
+        }
     }
 }

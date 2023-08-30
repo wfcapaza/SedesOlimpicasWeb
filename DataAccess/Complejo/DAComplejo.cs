@@ -47,7 +47,34 @@ namespace DataAccess
             }
             return listaComplejos;
         }
-
+        public async Task<List<Complejo>> ListaComplejosPorSede(int idSede)
+        {
+            var listaComplejos = new List<Complejo>();
+            using (var conexion = new SqlConnection(_cadenaSQL))
+            {
+                conexion.Open();
+                var cmd = new SqlCommand("SP_ListaComplejosPorSede", conexion);
+                cmd.Parameters.AddWithValue("@IdSede", idSede);
+                cmd.CommandType = CommandType.StoredProcedure;
+                using (var dr = await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        listaComplejos.Add(new Complejo()
+                        {
+                            IdComplejo = Convert.ToInt32(dr["IdComplejo"]),
+                            NombreComplejo = dr["NombreComplejo"].ToString(),
+                            RefSede = new Sede()
+                            {
+                                IdSede = Convert.ToInt32(dr["IdSede"]),
+                                Nombre = dr["Nombre"].ToString(),
+                            }
+                        });
+                    }
+                }
+            }
+            return listaComplejos;
+        }
         public async Task<Complejo> ObtenerComplejo(int idComplejo)
         {
             Complejo complejo = null;

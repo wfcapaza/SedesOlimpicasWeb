@@ -11,5 +11,6 @@ namespace BusinessLogic
         Task<bool> CrearComisario(Comisario comisario);
         Task<bool> EditarComisario(Comisario comisario);
         Task<bool> EliminarComisario(int idComisario);
+        Task<List<Comisario>> ListaSedeConComisario();
     }
 }

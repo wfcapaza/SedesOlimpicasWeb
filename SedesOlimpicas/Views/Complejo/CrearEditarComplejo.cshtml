@@ -91,13 +91,13 @@
             $(document).on("click", "#guardarCambios", function () {
                 if ($("#formularioComplejo").valid()) {
                     const complejo = {
-                        IdComplejo: $("#IdComplejo").val(),		
-                        NombreComplejo: $("#NombreComplejo").val(),	
-                        Localizacion: $("#Localizacion").val(),	
-                        Jefe: $("#Jefe").val(),			
-                        TipoDeporte: $("#TipoDeporte").val(),		
-                        AreaOcupada: $("#AreaOcupada").val(),		
-                        IdSede: $("#IdSede").val(),			
+                        IdComplejo: $("#IdComplejo").val(),
+                        NombreComplejo: $("#NombreComplejo").val(),
+                        Localizacion: $("#Localizacion").val(),
+                        Jefe: $("#Jefe").val(),
+                        TipoDeporte: $("#TipoDeporte").val(),
+                        AreaOcupada: $("#AreaOcupada").val(),
+                        IdSede: $("#IdSede").val(),
                     };
 
                     $.ajax({
@@ -160,7 +160,16 @@
                         min: 1
                     },
                     "IdSede": {
-                        required: true
+                        required: true,
+                        remote: {
+                            url: "@Url.Action("ValidarNroMaxSedes")",
+                            type: "POST",
+                            data: {
+                                idSede: function () {
+                                    return $("#IdSede").val()
+                                }
+                            }
+                        }
                     }
                 },
                 messages: {
@@ -184,7 +193,8 @@
                         min: "Area ocupada debe se mayor o igual a 1",
                     },
                     IdSede: {
-                        required: "Seleccione una sede"
+                        required: "Seleccione una sede",
+                        remote: "La sede ya tiene el nro. máximo de complejos"
                     }
                 }
             });

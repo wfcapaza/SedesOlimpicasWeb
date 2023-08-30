@@ -11,5 +11,6 @@ namespace BusinessLogic
         Task<bool> CrearSede(Sede sede);
         Task<bool> EditarSede(Sede sede);
         Task<bool> EliminarSede(int idSede);
+        Task<bool> ValidarNombreSede(string nombreSede);
     }
 }

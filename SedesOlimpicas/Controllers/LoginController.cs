@@ -30,7 +30,7 @@ namespace SedesOlimpicas.Controllers
                 return View("InicioSesion");
 
             Session["Usuario"] = usuario;
-            return RedirectToAction("Index", "Sede");
+            return RedirectToAction("Index", "Home");
         }
         public ActionResult CerrarSesion()
         {

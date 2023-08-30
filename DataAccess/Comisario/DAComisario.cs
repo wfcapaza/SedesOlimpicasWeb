@@ -134,6 +134,44 @@ namespace DataAccess
                 else
                     return false;
             }
-        }        
+        }
+        public async Task<List<Comisario>> ListaSedeConComisario()
+        {
+            var listaSedeConComisario = new List<Comisario>();
+            using (var conexion = new SqlConnection(_cadenaSQL))
+            {
+                conexion.Open();
+                var cmd = new SqlCommand("SP_ListaSedeConComisario", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                using (var dr = await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        listaSedeConComisario.Add(new Comisario()
+                        {
+                            Nombres = dr["Nombres"].ToString(),
+                            Apellidos = dr["Apellidos"].ToString(),
+                            TipoTarea = dr["TipoTarea"].ToString(),
+                            RefEvento = new Evento()
+                            {
+                                NombreEvento = dr["NombreEvento"].ToString(),
+                                Fecha = dr["Fecha"].ToString(),
+                                RefComplejo = new Complejo()
+                                {
+                                    NombreComplejo = dr["NombreComplejo"].ToString(),
+                                    TipoDeporte = dr["TipoDeporte"].ToString(),
+                                    RefSede = new Sede()
+                                    {
+                                        Nombre = dr["Nombre"].ToString(),
+                                        Presupuesto = Convert.ToDecimal(dr["Presupuesto"])
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            return listaSedeConComisario;
+        }
     }
 }

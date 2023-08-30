@@ -131,7 +131,16 @@
                 rules: {
                     "Nombre": {
                         required: true,
-                        maxlength: 50
+                        maxlength: 50,
+                        remote: {
+                            url: "@Url.Action("ValidarNombreSede")",
+                            type: "POST",
+                            data: {
+                                nombreSede: function () {
+                                    return $("#Nombre").val();
+                                }
+                            }
+                        }
                     },
                     "NroComplejos": {
                         required: true,
@@ -146,7 +155,8 @@
                 messages: {
                     Nombre: {
                         required: "Nombre es requerido",
-                        maxlength: "Nombre debe ser menor o igual a 50 carácteres"
+                        maxlength: "Nombre debe ser menor o igual a 50 carácteres",
+                        remote: "Ya existe una sede con el mismo nombre"
                     },
                     NroComplejos: {
                         required: "Nro. de complejos es requerido",

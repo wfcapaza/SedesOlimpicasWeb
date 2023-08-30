@@ -75,5 +75,9 @@ namespace SedesOlimpicas.Controllers
         {
             return Json(await _sede.EliminarSede(idSede), JsonRequestBehavior.AllowGet);
         }
+        public async Task<JsonResult> ValidarNombreSede(string nombreSede)
+        {
+            return Json(await _sede.ValidarNombreSede(nombreSede), JsonRequestBehavior.AllowGet);
+        }
     }
 }

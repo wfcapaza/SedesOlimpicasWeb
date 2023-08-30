@@ -34,6 +34,10 @@ namespace BusinessLogic
         public async Task<bool> EliminarComisario(int idComisario)
         {
             return await _comisario.EliminarComisario(idComisario);
-        }        
+        }
+        public async Task<List<Comisario>> ListaSedeConComisario()
+        {
+            return await _comisario.ListaSedeConComisario();
+        }
     }
 }

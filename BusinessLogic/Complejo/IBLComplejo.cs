@@ -11,5 +11,6 @@ namespace BusinessLogic
         Task<bool> CrearComplejo(Complejo complejo);
         Task<bool> EditarComplejo(Complejo complejo);
         Task<bool> EliminarComplejo(int idComplejo);
+        Task<bool> ValidarNroMaxSedes(int idSede);
     }
 }

@@ -35,5 +35,10 @@ namespace BusinessLogic
         {
             return await _sede.EliminarSede(idSede);
         }
+        public async Task<bool> ValidarNombreSede(string nombreSede)
+        {
+            var listaSedes = await _sede.ListaSedes();
+            return !listaSedes.Any(sede => sede.Nombre == nombreSede);
+        }
     }
 }
